@@ -48,7 +48,7 @@ producer 쪽 lock 경쟁을 없애려면 lock-free 큐가 필요합니다. JCToo
 | 32 | 603.7 ± 34.9 | 54.5 ± 35.2 | 3,226,246 | 22,374,195 |
 | 64 | 3297.5 ± 2976.3 | 52.1 ± 50.2 | 9,561,047 | 23,637,967 |
 
-producerThreads 1부터 4까지는 단일 consumer가 공급을 따라가 큐가 가득 차지 않습니다. 이 구간에서 MpscArrayQueue의 offer 지연은 21~25ns이고 오차가 ±0.15~0.66ns로 작습니다. ArrayBlockingQueue는 60~70ns로 세 배가량 느리고 오차도 ±8.8~35.6ns로 큽니다. MpscArrayQueue가 적재 지연을 낮게 유지한 결과입니다.
+producerThreads 1부터 4까지는 단일 consumer가 공급을 따라가 큐가 가득 차지 않습니다. 이 구간에서 MpscArrayQueue의 offer 지연은 21\~25ns이고 오차가 ±0.15\~0.66ns로 작습니다. ArrayBlockingQueue는 60\~70ns로 세 배가량 느리고 오차도 ±8.8\~35.6ns로 큽니다. MpscArrayQueue가 적재 지연을 낮게 유지한 결과입니다.
 
 producerThreads를 더 늘리면 consumer 하나가 공급을 따라가지 못해 큐가 가득 찹니다. MpscArrayQueue는 producerThreads 8까지 offer 지연이 일정하다가, 16에서 drop이 37만에서 1410만으로 급등합니다. 큐가 가득 차 offer가 바로 실패하는 횟수가 급증했다는 의미입니다. 이 구간에서 offer 지연은 12.5ns로 낮아지는데, 적재 연산을 하지 않고 바로 drop 하기 때문입니다.
 
