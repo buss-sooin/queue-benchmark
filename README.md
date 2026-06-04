@@ -14,7 +14,7 @@
 
 ## 큐 자료구조 선택
 
-후킹 데이터를 모아 두었다가 전송한다는 요구를 충족하는 Java 자료구조는 queue입니다. Java의 Queue 구현체에는 여러 종류가 있지만, 용량을 고정한 채 넣고 빼는 흐름이라는 조건으로 ArrayBlockingQueue와 LinkedBlockingQueue 두 개로 좁혔습니다. ArrayBlockingQueue는 넣기와 꺼내기가 lock 하나를 공유하고, LinkedBlockingQueue는 넣기와 꺼내기가 각각 별도의 lock으로 동작합니다. consumer가 QueueWorker 하나뿐이고 큐에 넣어 꺼내 전송하기만 하는 단순한 흐름에는 단일 lock의 ArrayBlockingQueue가 맞다고 보고 ArrayBlockingQueue로 구현을 시작했습니다.
+수집한 데이터가 들어와 전송으로 빠져나가는 흐름에 맞는 Java 자료구조는 queue입니다. Java의 Queue 구현체에는 여러 종류가 있지만, 용량을 고정한 채 넣고 빼는 흐름이라는 조건으로 ArrayBlockingQueue와 LinkedBlockingQueue 두 개로 좁혔습니다. ArrayBlockingQueue는 넣기와 꺼내기가 lock 하나를 공유하고, LinkedBlockingQueue는 넣기와 꺼내기가 각각 별도의 lock으로 동작합니다. consumer가 QueueWorker 하나뿐이고 큐에 넣어 꺼내 전송하기만 하는 단순한 흐름에는 단일 lock의 ArrayBlockingQueue가 맞다고 보고 ArrayBlockingQueue로 구현을 시작했습니다.
 
 큐는 agent가 선언해 들고 있는 객체이지만, 큐에 넣는 일은 타깃 앱의 요청 스레드가 직접 수행합니다. agent의 후킹 코드가 그 요청 스레드에서 함께 실행되기 때문입니다. ArrayBlockingQueue의 단일 lock에 경쟁이 생기면, lock을 얻으려 기다리는 주체가 바로 타깃 앱의 요청 스레드입니다. 기다리는 그 시간만큼 타깃 앱의 요청 처리가 늦어집니다. agent가 들고 있는 자료구조의 부하가 타깃 앱의 요청 처리 지연으로 그대로 넘어가는, agent 모듈만의 특수성입니다.
 
