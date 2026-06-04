@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'me.champeau.jmh' version '0.7.3'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 측정 대상 자료구조 — agent의 DataQueueImpl이 쓰는 것과 동일 버전
+    jmh 'org.jctools:jctools-core:4.0.6'
+}
+
+// 워밍업/측정/fork/mode 설정은 QueueBenchmark의 어노테이션에 둔다.
+// 실행은 jmhJar로 만든 jar에 -t 옵션을 바꿔가며 돌린다(아래 README 참고).
